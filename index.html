@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signal Drift</title>
+<style>
+ body{font-family:Georgia,serif;margin:0;padding:0 16px;background:#f2f4f3;color:#1e2422}
+ .wrap{max-width:860px;margin:0 auto;padding:24px 0 48px}
+ h1{font-size:1.7rem;margin:0 0 2px}
+ .tag{color:#5d6663;margin:0 0 20px;font-size:.95rem}
+ .panel{background:#fff;border:1px solid #ccd6d1;padding:16px 18px;margin-bottom:14px}
+ .panel h2{margin:0 0 10px;font-size:1.05rem}
+ .row{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+ .card{flex:1 1 180px;border:1px solid #bcc9c3;background:#f7faf8;padding:10px 12px;cursor:pointer}
+ .card:hover{border-color:#4d6157}
+ .card.sel{border-color:#1e2422;background:#e7efe9}
+ .card b{display:block;margin-bottom:4px}
+ .card span{font-size:.88rem;color:#454f4a}
+ button{font:inherit;padding:8px 18px;background:#1e2422;color:#fff;border:0;cursor:pointer;margin-top:8px}
+ button:disabled{opacity:.4;cursor:default}
+ .kv{margin:4px 0}
+ .log{font-size:.9rem;max-height:210px;overflow-y:auto;background:#f7faf8;border:1px solid #ccd6d1;padding:8px 12px}
+ .log div{margin:3px 0}
+ .verdict{font-size:1.1rem;font-weight:bold;margin:6px 0}
+ table{border-collapse:collapse;width:100%;margin-top:8px;font-size:.92rem}
+ td,th{border:1px solid #ccd6d1;padding:4px 8px;text-align:left}
+ .muted{color:#5d6663;font-size:.85rem}
+ .src{font-size:.85rem;margin-top:18px}
+ .src a{color:#39473f}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Signal Drift</h1>
+<p class="tag">An eval set is quietly mislabeled. Choose how deep to audit before you ship.</p>
+
+<div id="m0" class="panel">
+ <h2>1. Pick the suspicion level</h2>
+ <div class="row" id="levels"></div>
+ <p class="muted">400 candidate rows. The suspected contamination rate sets what
+ auditing is worth. This round: <span id="levelname"></span>.</p>
+ <button id="levelNext" disabled>Set the level</button>
+</div>
+
+<div id="m1" class="panel" style="display:none">
+ <h2>2. Choose the approach</h2>
+ <div class="row" id="approaches"></div>
+ <p class="muted">Trust ships blind. The entropy lens flags rows whose loss sits
+ in the outlier band and sometimes drags clean rows with it. The full sweep
+ reads everything and still misses about one row in ten.</p>
+ <button id="runAudit" disabled>Run it</button>
+</div>
+
+<div id="m2" class="panel" style="display:none">
+ <h2>3. Audit report</h2>
+ <div id="report"></div>
+ <button id="fixAll">Fix every flagged row ($8 each)</button>
+ <button id="ship">Ship as is</button>
+ <div id="fixnote" class="muted"></div>
+</div>
+
+<div id="m3" class="panel" style="display:none">
+ <h2>4. Settlement</h2>
+ <div id="outcome"></div>
+ <div class="verdict" id="verdict"></div>
+ <table id="board"></table>
+ <p class="muted" id="lesson"></p>
+ <button id="again">New round</button>
+</div>
+
+<p class="src">More mislabel-audit arithmetic and eval teardowns on
+<a href="https://pastagi.com/">eval audits and serving math</a>.
+Background reading: <a href="https://en.wikipedia.org/wiki/Data_leakage">data leakage</a>,
+<a href="https://en.wikipedia.org/wiki/Goodhart%27s_law">Goodhart&#39;s law</a>.</p>
+</div>
+<script src="game.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
